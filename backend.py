@@ -1,8 +1,10 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 app = Flask(__name__)
+
+# Configure Database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///patients.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -27,6 +29,11 @@ def generate_sample_id():
     if last_entry:
         return f"SID{last_entry.id + 1:05d}"
     return "SID00001"
+
+# Route to Serve the Frontend HTML Page
+@app.route("/")
+def home():
+    return render_template("index.html")  # Ensure "index.html" exists in a "templates" folder
 
 # Endpoint to Handle Form Submission
 @app.route('/submit', methods=['POST'])
